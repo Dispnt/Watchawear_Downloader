@@ -12,20 +12,21 @@ def downloading_progress(blocks_read,block_size,total_size):
         print("Downloading... %d KB of %d KB" % (blocks_read*block_size/1024.0,total_size/1024.0))
 
 def action_select():
-    selected_action = int(input("\n'1' : description \n'2' : View Image\n'3' : Download Watchface\nany : EXIT\n"))
-    if selected_action == 1:
+    selected_action = int(input("\n'1' : Description \n'2' : View Image\n'3' : Download Watchface\nany : EXIT\n"))
+    if selected_action == 1: # Description
         print(item_des_list[selected_item_sub])
         action_select()
-    elif selected_action == 2:
+    elif selected_action == 2: # View Image
         selected_item_image_name = item_image_list[selected_item_sub].split("|")[0]
         selected_item_image_response = requests.get(img_add + selected_item_image_name)
         selected_item_image = Image.open(BytesIO(selected_item_image_response.content))
         selected_item_image.show()
         action_select()
-    elif selected_action == 3:
+    elif selected_action == 3: # Download
         print("Downloading...")
         selected_item_filename = item_filename_list[selected_item_sub]
-        urllib.request.urlretrieve(download_add + selected_item_filename, selected_item_title + '.watch', downloading_progress)
+        download_file_name = selected_item_title.replace(':',' -') + '.watch'
+        urllib.request.urlretrieve(download_add + selected_item_filename, download_file_name , downloading_progress)
         print("finished!")
     else:
         print("???")
@@ -35,7 +36,7 @@ search_add = 'http://www.watchawear.com/index.php?option=com_jsonexport&table=wa
 download_add = 'http://www.watchawear.com/jdownloads/--_watchmaker_--/watchmaker_watch_faces_free/'
 img_add = 'http://watchawear.com/images/jdownloads/screenshots/thumbnails/'
 
-search_text=str(input("Search Something: "))
+search_text = str(input("Search Something: "))
 search_json = requests.get(search_add + search_text).json()
 
 
